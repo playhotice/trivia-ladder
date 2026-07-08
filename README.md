@@ -1,36 +1,24 @@
-# Trivia Ladder v2 — Game Show Mobile Edition
+# Trivia Ladder v3 — Clean Mobile Flow
 
-A mobile-first daily trivia game built for a head-to-head showdown.
+Updated from the latest design notes:
 
-## New in v2
+- Simple home screen: “Today’s Board Is Live,” choose Ian or Shannon, Start Today’s Round.
+- Game screen only shows the current clue, answers, and a 30-second timer.
+- Player selects an answer, then taps Submit.
+- Feedback screen shows Correct/Incorrect, explanation, amount won, and Next Clue.
+- Keeps Final Ladder, leaderboard, W-D-L record, current streak, weekly wins, lifetime bank, and score-code sharing for separate phones.
 
-- More game-show / Jeopardy-inspired visual style
-- Deep blue board, gold money values, big clue panels
-- Better phone layout
-- No default players — each phone can enter the player name once
-- Score sharing for separate phones:
-  - Finish your round
-  - Copy your score code
-  - Text it to the other player
-  - They paste it on the leaderboard page to import your score
+Open `index.html` locally or upload these files to GitHub Pages.
 
-## Included stats
 
-- Today’s Bank
-- Overall Record in W-D-L format
-- Current Streak
-- Wins This Week
-- Overall Wins
-- Lifetime Bank
-- Best Day
-- Days Played
+## New in v4
 
-## How to open
-
-Double-click `index.html`.
-
-## Important phone note
-
-This version can work across separate phones by using the score-code import system. That is a lightweight workaround.
-
-For the real version where scores sync automatically between phones, the next step is adding a shared database such as Firebase or Supabase and hosting the app online.
+- The ladder now gets progressively harder by dollar value:
+  - Q1 / $100 = Easy
+  - Q2 / $200 = Easy-Medium
+  - Q3 / $300 = Medium
+  - Q4 / $400 = Hard
+  - Q5 / $500 = Hardest
+- Categories are randomized daily inside each difficulty tier.
+- The daily picker tries to avoid duplicate categories on the same board when possible.
+- The final question is also randomized daily.
