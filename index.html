@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trivia Ladder — Daily Game Show</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-nav">
+      <button class="brand" id="homeLogo" type="button" aria-label="Go home">
+        <span class="brand-mark">$</span>
+        <span>
+          <strong>Trivia Ladder</strong>
+          <small>Daily head-to-head trivia</small>
+        </span>
+      </button>
+
+      <nav class="nav-actions">
+        <button class="ghost-btn" id="playerButton" type="button">Player</button>
+        <button class="ghost-btn" id="leaderboardButton" type="button">Leaderboard</button>
+      </nav>
+    </header>
+
+    <main id="app" class="view"></main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
