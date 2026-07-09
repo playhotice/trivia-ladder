@@ -1,78 +1,85 @@
-# Trivia Ladder v7 — Firebase Shared Leaderboard
+# Trivia Ladder v8 — Supabase Shared Leaderboard
 
-This version adds shared online score syncing with Firebase Realtime Database.
+This version uses Supabase instead of Firebase, so it can work more like your Hot Ice setup.
 
-## What changed
+## What this version does
 
 - Ian and Shannon can play on separate phones.
-- Scores save to one shared Firebase leaderboard.
-- Leaderboard updates across devices.
-- LocalStorage still works as a fallback if Firebase is not configured.
-- Removed score-code sharing/import boxes.
+- Scores save to one shared Supabase table.
+- Leaderboard pulls from Supabase.
+- Realtime updates can work if Realtime is enabled for the table.
+- If Supabase is not configured yet, the app still runs in local mode.
 
-## Files
+## Files to upload to GitHub
+
+Upload all of these to your `trivia-ladder` repo:
 
 - `index.html`
 - `style.css`
 - `app.js`
+- `supabase-config.js`
+- `supabase-schema.sql`
+- `README.md`
+
+You no longer need:
+
 - `firebase-config.js`
 - `database-rules.json`
 
-## Setup steps
+## Supabase setup
 
-### 1. Create Firebase project
+### 1. Create or open your Supabase project
 
-Go to Firebase Console and create a project.
+Use the same Supabase account/project style you used for Hot Ice, or create a new project for Trivia Ladder.
 
-### 2. Add a Web App
+### 2. Run the SQL
 
-In the Firebase project overview, click the Web icon and register a web app. Firebase will give you a `firebaseConfig` object.
+Open Supabase > SQL Editor.
 
-### 3. Create Realtime Database
+Paste everything from:
 
-In Firebase, create a Realtime Database.
+`supabase-schema.sql`
 
-### 4. Set temporary rules
+Run it.
 
-For the first personal version, paste the rules from `database-rules.json`.
+### 3. Copy your Supabase keys
 
-Important: these are simple prototype rules for a personal two-player game. They are not production security rules.
+Go to Supabase > Project Settings > API.
 
-### 5. Paste Firebase config
+Copy:
 
-Open `firebase-config.js`.
+- Project URL
+- anon/public key
+
+### 4. Update `supabase-config.js`
 
 Change:
 
 ```js
-export const USE_FIREBASE = false;
+export const USE_SUPABASE = false;
 ```
 
 to:
 
 ```js
-export const USE_FIREBASE = true;
+export const USE_SUPABASE = true;
 ```
 
-Then paste your Firebase config into the `firebaseConfig` object.
+Then paste:
 
-### 6. Upload to GitHub Pages
+```js
+export const supabaseUrl = "YOUR_PROJECT_URL";
+export const supabaseAnonKey = "YOUR_ANON_PUBLIC_KEY";
+```
 
-Upload all files to your `trivia-ladder` GitHub repo:
+### 5. Upload to GitHub Pages
 
-- `index.html`
-- `style.css`
-- `app.js`
-- `firebase-config.js`
-- `database-rules.json`
-- `README.md`
+Commit the updated files.
 
-Once GitHub Pages rebuilds, open the site on both phones.
+When the live site reloads, the home screen should show:
 
-## Expected behavior
+`Shared leaderboard live`
 
-Home screen should show:
+## Security note
 
-- Green dot: shared leaderboard live
-
-Then Ian can play on one phone and Shannon can play on another phone. Both results should appear in the same leaderboard.
+The included Row Level Security policies are simple prototype policies for a two-player personal game. They restrict rows to the `ian-shannon` room and player IDs `ian` / `shannon`, but they are not production-level authentication.

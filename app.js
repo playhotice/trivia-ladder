@@ -1,11 +1,10 @@
-import { USE_FIREBASE, APP_ROOM_ID, firebaseConfig } from "./firebase-config.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { USE_SUPABASE, APP_ROOM_ID, supabaseUrl, supabaseAnonKey } from "./supabase-config.js";
 
 const STORAGE_KEYS = {
-  players: "triviaLadder.players.v7",
-  activePlayer: "triviaLadder.activePlayer.v7",
-  results: "triviaLadder.results.v7",
+  players: "triviaLadder.players.v8",
+  activePlayer: "triviaLadder.activePlayer.v8",
+  results: "triviaLadder.results.v8",
 };
 
 const QUESTION_VALUES = [100, 200, 300, 400, 500];
@@ -81,8 +80,8 @@ const state = {
     enabled: false,
     connected: false,
     message: "Local mode",
-    db: null,
-    resultsRef: null,
+    client: null,
+    channel: null,
   },
 };
 
@@ -93,46 +92,109 @@ async function init() {
   state.results = loadJSON(STORAGE_KEYS.results, {});
   renderHome();
 
-  await initFirebaseSync();
+  await initSupabaseSync();
 }
 
-async function initFirebaseSync() {
-  const hasConfig = firebaseConfig?.apiKey && !String(firebaseConfig.apiKey).includes("PASTE_");
-  if (!USE_FIREBASE || !hasConfig) {
+async function initSupabaseSync() {
+  const hasConfig =
+    USE_SUPABASE &&
+    supabaseUrl &&
+    supabaseAnonKey &&
+    !String(supabaseUrl).includes("PASTE_") &&
+    !String(supabaseAnonKey).includes("PASTE_");
+
+  if (!hasConfig) {
     state.sync = { ...state.sync, enabled: false, connected: false, message: "Local mode" };
     renderCurrentView();
     return;
   }
 
   try {
-    const firebaseApp = initializeApp(firebaseConfig);
-    const db = getDatabase(firebaseApp);
-    const resultsRef = ref(db, `triviaLadder/${APP_ROOM_ID}/results`);
+    const client = createClient(supabaseUrl, supabaseAnonKey);
 
-    state.sync = { ...state.sync, enabled: true, connected: false, message: "Connecting…", db, resultsRef };
+    state.sync = {
+      ...state.sync,
+      enabled: true,
+      connected: false,
+      message: "Connecting…",
+      client,
+      channel: null,
+    };
+
+    await loadSupabaseResults();
+
+    const channel = client
+      .channel(`trivia-ladder-${APP_ROOM_ID}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "trivia_ladder_results",
+          filter: `room_id=eq.${APP_ROOM_ID}`,
+        },
+        async () => {
+          await loadSupabaseResults(false);
+        }
+      )
+      .subscribe(status => {
+        if (status === "SUBSCRIBED") {
+          state.sync.connected = true;
+          state.sync.message = "Shared leaderboard live";
+          renderCurrentView();
+        }
+      });
+
+    state.sync.channel = channel;
+    state.sync.connected = true;
+    state.sync.message = "Shared leaderboard live";
     renderCurrentView();
-
-    onValue(
-      resultsRef,
-      snapshot => {
-        state.results = snapshot.val() || {};
-        saveJSON(STORAGE_KEYS.results, state.results);
-        state.sync.connected = true;
-        state.sync.message = "Shared leaderboard live";
-        renderCurrentView();
-      },
-      error => {
-        console.error(error);
-        state.sync.connected = false;
-        state.sync.message = "Sync error";
-        renderCurrentView();
-      }
-    );
   } catch (error) {
     console.error(error);
-    state.sync = { ...state.sync, enabled: false, connected: false, message: "Firebase setup needed" };
+    state.sync = { ...state.sync, enabled: false, connected: false, message: "Supabase setup needed" };
     renderCurrentView();
   }
+}
+
+async function loadSupabaseResults(shouldRender = true) {
+  if (!state.sync.client) return;
+
+  const { data, error } = await state.sync.client
+    .from("trivia_ladder_results")
+    .select("*")
+    .eq("room_id", APP_ROOM_ID);
+
+  if (error) {
+    console.error(error);
+    state.sync.connected = false;
+    state.sync.message = "Sync error";
+    if (shouldRender) renderCurrentView();
+    return;
+  }
+
+  const nextResults = {};
+  for (const row of data || []) {
+    const dateKey = row.game_date;
+    const playerId = row.player_id;
+
+    if (!nextResults[dateKey]) nextResults[dateKey] = {};
+    nextResults[dateKey][playerId] = {
+      playerId,
+      playerName: row.player_name,
+      dateKey,
+      bank: row.bank,
+      completedAt: row.completed_at,
+      answers: row.answers || [],
+      final: row.final || {},
+    };
+  }
+
+  state.results = nextResults;
+  saveJSON(STORAGE_KEYS.results, state.results);
+  state.sync.connected = true;
+  state.sync.message = "Shared leaderboard live";
+
+  if (shouldRender) renderCurrentView();
 }
 
 function renderCurrentView() {
@@ -549,9 +611,27 @@ async function saveCompletedGame(finalAnswer) {
   persistResults();
   state.game = null;
 
-  if (state.sync.enabled && state.sync.db) {
+  if (state.sync.enabled && state.sync.client) {
     try {
-      await set(ref(state.sync.db, `triviaLadder/${APP_ROOM_ID}/results/${g.dateKey}/${g.playerId}`), result);
+      const row = {
+        id: `${APP_ROOM_ID}_${g.dateKey}_${g.playerId}`,
+        room_id: APP_ROOM_ID,
+        player_id: g.playerId,
+        player_name: g.playerName,
+        game_date: g.dateKey,
+        bank,
+        answers: g.answers,
+        final: result.final,
+        completed_at: result.completedAt,
+      };
+
+      const { error } = await state.sync.client
+        .from("trivia_ladder_results")
+        .upsert(row, { onConflict: "id" });
+
+      if (error) throw error;
+
+      await loadSupabaseResults(false);
       showToast("Result saved to shared leaderboard.");
     } catch (error) {
       console.error(error);
@@ -612,9 +692,18 @@ async function resetTodayScore(playerId) {
     persistResults();
   }
 
-  if (state.sync.enabled && state.sync.db) {
+  if (state.sync.enabled && state.sync.client) {
     try {
-      await remove(ref(state.sync.db, `triviaLadder/${APP_ROOM_ID}/results/${key}/${playerId}`));
+      const { error } = await state.sync.client
+        .from("trivia_ladder_results")
+        .delete()
+        .eq("room_id", APP_ROOM_ID)
+        .eq("game_date", key)
+        .eq("player_id", playerId);
+
+      if (error) throw error;
+
+      await loadSupabaseResults(false);
       showToast("Today’s score reset from shared leaderboard.");
     } catch (error) {
       console.error(error);
@@ -699,9 +788,16 @@ async function clearAllScores() {
   state.results = {};
   persistResults();
 
-  if (state.sync.enabled && state.sync.db) {
+  if (state.sync.enabled && state.sync.client) {
     try {
-      await remove(ref(state.sync.db, `triviaLadder/${APP_ROOM_ID}/results`));
+      const { error } = await state.sync.client
+        .from("trivia_ladder_results")
+        .delete()
+        .eq("room_id", APP_ROOM_ID);
+
+      if (error) throw error;
+
+      await loadSupabaseResults(false);
       showToast("Shared scores cleared.");
     } catch (error) {
       console.error(error);
