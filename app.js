@@ -2,9 +2,9 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { USE_SUPABASE, APP_ROOM_ID, supabaseUrl, supabaseAnonKey } from "./supabase-config.js";
 
 const STORAGE_KEYS = {
-  players: "triviaLadder.players.v8",
-  activePlayer: "triviaLadder.activePlayer.v8",
-  results: "triviaLadder.results.v8",
+  players: "triviaLadder.players.v9",
+  activePlayer: "triviaLadder.activePlayer.v9",
+  results: "triviaLadder.results.v9",
 };
 
 const QUESTION_VALUES = [100, 200, 300, 400, 500];
@@ -673,7 +673,6 @@ function renderResults(result) {
         <div class="row-actions">
           <button class="primary-btn" id="leaderboardButton" type="button">Leaderboard</button>
           <button class="secondary-btn" id="homeButton" type="button">Home</button>
-          <button class="danger-btn" id="resetTodayButton" type="button">Reset Today</button>
         </div>
       </div>
     </section>
@@ -771,7 +770,6 @@ function renderLeaderboard() {
 
         <div class="row-actions">
           <button class="primary-btn" id="homeButton" type="button">Home</button>
-          <button class="danger-btn" id="clearDataButton" type="button">Clear All Scores</button>
         </div>
       </div>
     </section>

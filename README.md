@@ -83,3 +83,10 @@ When the live site reloads, the home screen should show:
 ## Security note
 
 The included Row Level Security policies are simple prototype policies for a two-player personal game. They restrict rows to the `ian-shannon` room and player IDs `ian` / `shannon`, but they are not production-level authentication.
+
+
+## New in v9
+
+- Removed the `Reset Today` button from the results screen.
+- Removed the `Clear All Scores` button from the leaderboard screen.
+- Ian and Shannon are now locked to one saved result per day from the app UI.
