@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "triviaLadder": {
+      "$room": {
+        ".read": true,
+        ".write": true
+      }
+    }
+  }
+}
