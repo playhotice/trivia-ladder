@@ -90,3 +90,10 @@ The included Row Level Security policies are simple prototype policies for a two
 - Removed the `Reset Today` button from the results screen.
 - Removed the `Clear All Scores` button from the leaderboard screen.
 - Ian and Shannon are now locked to one saved result per day from the app UI.
+
+
+## New in v10
+
+- Fixed `supabase-config.js` so Supabase is turned on.
+- Uses the configured Supabase URL and publishable key.
+- Keeps the locked daily results setup with no Reset Today / Clear All Scores buttons.
