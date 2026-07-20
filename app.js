@@ -2,9 +2,9 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { USE_SUPABASE, APP_ROOM_ID, supabaseUrl, supabaseAnonKey } from "./supabase-config.js";
 
 const STORAGE_KEYS = {
-  players: "triviaLadder.players.v9",
-  activePlayer: "triviaLadder.activePlayer.v9",
-  results: "triviaLadder.results.v9",
+  players: "triviaLadder.players.v11",
+  activePlayer: "triviaLadder.activePlayer.v11",
+  results: "triviaLadder.results.v11",
 };
 
 const QUESTION_VALUES = [100, 200, 300, 400, 500];
@@ -65,6 +65,859 @@ const FINAL_BANK = [
   { id: "final-literature-smaug", category: "Books", question: "In The Hobbit, what is the name of the dragon?", options: ["Smaug", "Glaurung", "Drogon", "Ancalagon"], answerIndex: 0, explanation: "Smaug is the dragon in The Hobbit." },
   { id: "final-sports-mound", category: "Sports", question: "In Major League Baseball, the pitching rubber is how far from home plate?", options: ["55 feet", "60 feet 6 inches", "63 feet", "66 feet 6 inches"], answerIndex: 1, explanation: "The MLB pitching rubber is 60 feet 6 inches from home plate." },
 ];
+
+
+
+const EXTRA_QUESTION_BANK = {
+  "100": [
+    {
+      "id": "100-space-jupiter",
+      "category": "Space",
+      "difficulty": "Easy",
+      "question": "Which planet is the largest in our solar system?",
+      "options": [
+        "Earth",
+        "Jupiter",
+        "Mars",
+        "Venus"
+      ],
+      "answerIndex": 1,
+      "explanation": "Jupiter is the largest planet in our solar system."
+    },
+    {
+      "id": "100-animals-panda",
+      "category": "Animals",
+      "difficulty": "Easy",
+      "question": "What type of animal is a giant panda?",
+      "options": [
+        "Bear",
+        "Cat",
+        "Dog",
+        "Rabbit"
+      ],
+      "answerIndex": 0,
+      "explanation": "The giant panda is a bear."
+    },
+    {
+      "id": "100-geography-france",
+      "category": "Geography",
+      "difficulty": "Easy",
+      "question": "Paris is the capital of which country?",
+      "options": [
+        "Spain",
+        "France",
+        "Italy",
+        "Germany"
+      ],
+      "answerIndex": 1,
+      "explanation": "Paris is the capital city of France."
+    },
+    {
+      "id": "100-science-mars",
+      "category": "Science",
+      "difficulty": "Easy",
+      "question": "Which planet is often called the Red Planet?",
+      "options": [
+        "Mercury",
+        "Mars",
+        "Saturn",
+        "Neptune"
+      ],
+      "answerIndex": 1,
+      "explanation": "Mars is known as the Red Planet because of its reddish appearance."
+    },
+    {
+      "id": "100-sports-nba",
+      "category": "Sports",
+      "difficulty": "Easy",
+      "question": "How many points is a made free throw worth in basketball?",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "answerIndex": 0,
+      "explanation": "A made free throw is worth 1 point."
+    },
+    {
+      "id": "100-food-sushi",
+      "category": "Food",
+      "difficulty": "Easy",
+      "question": "Sushi is most strongly associated with which country?",
+      "options": [
+        "Japan",
+        "Brazil",
+        "Mexico",
+        "Egypt"
+      ],
+      "answerIndex": 0,
+      "explanation": "Sushi is a traditional Japanese food."
+    },
+    {
+      "id": "100-music-piano",
+      "category": "Music",
+      "difficulty": "Easy",
+      "question": "A piano is played using which of these?",
+      "options": [
+        "Keys",
+        "Drumsticks",
+        "A bow",
+        "A pick"
+      ],
+      "answerIndex": 0,
+      "explanation": "A piano is played by pressing keys."
+    },
+    {
+      "id": "100-language-hola",
+      "category": "Language",
+      "difficulty": "Easy",
+      "question": "In Spanish, what does 'hola' mean?",
+      "options": [
+        "Goodbye",
+        "Thank you",
+        "Hello",
+        "Please"
+      ],
+      "answerIndex": 2,
+      "explanation": "'Hola' means hello in Spanish."
+    },
+    {
+      "id": "100-tech-keyboard",
+      "category": "Technology",
+      "difficulty": "Easy",
+      "question": "Which device is commonly used to type letters into a computer?",
+      "options": [
+        "Keyboard",
+        "Speaker",
+        "Monitor",
+        "Router"
+      ],
+      "answerIndex": 0,
+      "explanation": "A keyboard is commonly used for typing."
+    },
+    {
+      "id": "100-bible-ark",
+      "category": "Bible",
+      "difficulty": "Easy",
+      "question": "Who built the ark in the book of Genesis?",
+      "options": [
+        "Noah",
+        "Moses",
+        "David",
+        "Peter"
+      ],
+      "answerIndex": 0,
+      "explanation": "Noah built the ark in Genesis."
+    }
+  ],
+  "200": [
+    {
+      "id": "200-space-moon",
+      "category": "Space",
+      "difficulty": "Medium",
+      "question": "Roughly how long does it take the Moon to orbit Earth?",
+      "options": [
+        "1 day",
+        "7 days",
+        "27 days",
+        "365 days"
+      ],
+      "answerIndex": 2,
+      "explanation": "The Moon takes about 27 days to orbit Earth."
+    },
+    {
+      "id": "200-science-gold",
+      "category": "Science",
+      "difficulty": "Medium",
+      "question": "What is the chemical symbol for gold?",
+      "options": [
+        "Go",
+        "Gd",
+        "Au",
+        "Ag"
+      ],
+      "answerIndex": 2,
+      "explanation": "Gold's chemical symbol is Au."
+    },
+    {
+      "id": "200-geography-nile",
+      "category": "Geography",
+      "difficulty": "Medium",
+      "question": "The Nile River is most closely associated with which country?",
+      "options": [
+        "Egypt",
+        "Canada",
+        "India",
+        "Spain"
+      ],
+      "answerIndex": 0,
+      "explanation": "The Nile River is famously associated with Egypt."
+    },
+    {
+      "id": "200-history-romulus",
+      "category": "History",
+      "difficulty": "Medium",
+      "question": "According to legend, Rome was founded by Romulus and whom?",
+      "options": [
+        "Remus",
+        "Caesar",
+        "Nero",
+        "Augustus"
+      ],
+      "answerIndex": 0,
+      "explanation": "Roman legend says Rome was founded by Romulus and Remus."
+    },
+    {
+      "id": "200-literature-holmes",
+      "category": "Literature",
+      "difficulty": "Medium",
+      "question": "Sherlock Holmes was created by which author?",
+      "options": [
+        "Arthur Conan Doyle",
+        "Charles Dickens",
+        "Mark Twain",
+        "Jules Verne"
+      ],
+      "answerIndex": 0,
+      "explanation": "Arthur Conan Doyle created Sherlock Holmes."
+    },
+    {
+      "id": "200-sports-golf",
+      "category": "Sports",
+      "difficulty": "Medium",
+      "question": "In golf, what is the term for one stroke under par on a hole?",
+      "options": [
+        "Birdie",
+        "Bogey",
+        "Eagle",
+        "Double"
+      ],
+      "answerIndex": 0,
+      "explanation": "A birdie is one stroke under par."
+    },
+    {
+      "id": "200-music-mozart",
+      "category": "Music",
+      "difficulty": "Medium",
+      "question": "Wolfgang Amadeus Mozart is most associated with which type of music?",
+      "options": [
+        "Classical",
+        "Jazz",
+        "Hip-hop",
+        "Country"
+      ],
+      "answerIndex": 0,
+      "explanation": "Mozart is one of the most famous composers of classical music."
+    },
+    {
+      "id": "200-food-paella",
+      "category": "Food",
+      "difficulty": "Medium",
+      "question": "Paella is a famous rice dish from which country?",
+      "options": [
+        "Spain",
+        "Greece",
+        "Thailand",
+        "Morocco"
+      ],
+      "answerIndex": 0,
+      "explanation": "Paella is a traditional Spanish rice dish."
+    },
+    {
+      "id": "200-language-bonjour",
+      "category": "Language",
+      "difficulty": "Medium",
+      "question": "In French, what does 'bonjour' mean?",
+      "options": [
+        "Good morning",
+        "Good night",
+        "Thank you",
+        "Excuse me"
+      ],
+      "answerIndex": 0,
+      "explanation": "'Bonjour' is commonly used to mean hello or good morning in French."
+    },
+    {
+      "id": "200-bible-goliath",
+      "category": "Bible",
+      "difficulty": "Medium",
+      "question": "Who defeated Goliath in the Bible?",
+      "options": [
+        "David",
+        "Samson",
+        "Joshua",
+        "Solomon"
+      ],
+      "answerIndex": 0,
+      "explanation": "David defeated Goliath."
+    }
+  ],
+  "300": [
+    {
+      "id": "300-space-galaxy",
+      "category": "Space",
+      "difficulty": "Hard",
+      "question": "What is the name of the galaxy that contains our solar system?",
+      "options": [
+        "Andromeda",
+        "Milky Way",
+        "Sombrero",
+        "Whirlpool"
+      ],
+      "answerIndex": 1,
+      "explanation": "Our solar system is located in the Milky Way galaxy."
+    },
+    {
+      "id": "300-science-sodium",
+      "category": "Science",
+      "difficulty": "Hard",
+      "question": "What is the chemical symbol for sodium?",
+      "options": [
+        "So",
+        "S",
+        "Na",
+        "Sn"
+      ],
+      "answerIndex": 2,
+      "explanation": "Sodium's chemical symbol is Na."
+    },
+    {
+      "id": "300-geography-danube",
+      "category": "Geography",
+      "difficulty": "Hard",
+      "question": "The Danube River flows through which of these capital cities?",
+      "options": [
+        "Vienna",
+        "Madrid",
+        "Oslo",
+        "Dublin"
+      ],
+      "answerIndex": 0,
+      "explanation": "The Danube flows through Vienna, Austria."
+    },
+    {
+      "id": "300-history-hastings",
+      "category": "History",
+      "difficulty": "Hard",
+      "question": "The Battle of Hastings took place in which year?",
+      "options": [
+        "1066",
+        "1215",
+        "1492",
+        "1776"
+      ],
+      "answerIndex": 0,
+      "explanation": "The Battle of Hastings took place in 1066."
+    },
+    {
+      "id": "300-literature-orwell",
+      "category": "Literature",
+      "difficulty": "Hard",
+      "question": "Who wrote Animal Farm?",
+      "options": [
+        "George Orwell",
+        "Aldous Huxley",
+        "Ernest Hemingway",
+        "F. Scott Fitzgerald"
+      ],
+      "answerIndex": 0,
+      "explanation": "George Orwell wrote Animal Farm."
+    },
+    {
+      "id": "300-sports-nfl",
+      "category": "Sports",
+      "difficulty": "Hard",
+      "question": "In the NFL, how many points is a safety worth?",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "6"
+      ],
+      "answerIndex": 1,
+      "explanation": "A safety is worth 2 points in football."
+    },
+    {
+      "id": "300-art-starry",
+      "category": "Art",
+      "difficulty": "Hard",
+      "question": "Who painted The Starry Night?",
+      "options": [
+        "Vincent van Gogh",
+        "Claude Monet",
+        "Pablo Picasso",
+        "Salvador Dali"
+      ],
+      "answerIndex": 0,
+      "explanation": "Vincent van Gogh painted The Starry Night."
+    },
+    {
+      "id": "300-music-fifth",
+      "category": "Music",
+      "difficulty": "Hard",
+      "question": "Which composer wrote Symphony No. 5 in C minor?",
+      "options": [
+        "Beethoven",
+        "Bach",
+        "Vivaldi",
+        "Chopin"
+      ],
+      "answerIndex": 0,
+      "explanation": "Beethoven wrote Symphony No. 5 in C minor."
+    },
+    {
+      "id": "300-mythology-thor",
+      "category": "Mythology",
+      "difficulty": "Hard",
+      "question": "In Norse mythology, what is the name of Thor's hammer?",
+      "options": [
+        "Mjolnir",
+        "Gungnir",
+        "Excalibur",
+        "Aegis"
+      ],
+      "answerIndex": 0,
+      "explanation": "Thor's hammer is called Mjolnir."
+    },
+    {
+      "id": "300-bible-paul",
+      "category": "Bible",
+      "difficulty": "Hard",
+      "question": "Before he was known as Paul, what was the apostle Paul's name?",
+      "options": [
+        "Saul",
+        "Simon",
+        "Silas",
+        "Stephen"
+      ],
+      "answerIndex": 0,
+      "explanation": "Paul was previously known as Saul."
+    }
+  ],
+  "400": [
+    {
+      "id": "400-space-titan",
+      "category": "Space",
+      "difficulty": "Harder",
+      "question": "Titan is the largest moon of which planet?",
+      "options": [
+        "Saturn",
+        "Jupiter",
+        "Mars",
+        "Uranus"
+      ],
+      "answerIndex": 0,
+      "explanation": "Titan is Saturn's largest moon."
+    },
+    {
+      "id": "400-science-mitochondria",
+      "category": "Science",
+      "difficulty": "Harder",
+      "question": "Mitochondria are best known for producing what cells use for energy?",
+      "options": [
+        "ATP",
+        "DNA",
+        "Chlorophyll",
+        "Insulin"
+      ],
+      "answerIndex": 0,
+      "explanation": "Mitochondria produce ATP, the main energy currency of cells."
+    },
+    {
+      "id": "400-geography-malacca",
+      "category": "Geography",
+      "difficulty": "Harder",
+      "question": "The Strait of Malacca lies between the Malay Peninsula and which island?",
+      "options": [
+        "Sumatra",
+        "Borneo",
+        "Java",
+        "Sri Lanka"
+      ],
+      "answerIndex": 0,
+      "explanation": "The Strait of Malacca lies between the Malay Peninsula and Sumatra."
+    },
+    {
+      "id": "400-history-versailles",
+      "category": "History",
+      "difficulty": "Harder",
+      "question": "The Treaty of Versailles formally ended World War I between Germany and the Allied Powers in what year?",
+      "options": [
+        "1918",
+        "1919",
+        "1920",
+        "1921"
+      ],
+      "answerIndex": 1,
+      "explanation": "The Treaty of Versailles was signed in 1919."
+    },
+    {
+      "id": "400-literature-dante",
+      "category": "Literature",
+      "difficulty": "Harder",
+      "question": "The Divine Comedy was written by which poet?",
+      "options": [
+        "Dante Alighieri",
+        "Geoffrey Chaucer",
+        "John Milton",
+        "Virgil"
+      ],
+      "answerIndex": 0,
+      "explanation": "Dante Alighieri wrote The Divine Comedy."
+    },
+    {
+      "id": "400-sports-f1",
+      "category": "Sports",
+      "difficulty": "Harder",
+      "question": "In Formula 1, what color flag usually signals danger ahead and no overtaking?",
+      "options": [
+        "Yellow",
+        "Blue",
+        "Green",
+        "Checkered"
+      ],
+      "answerIndex": 0,
+      "explanation": "A yellow flag signals danger and usually means no overtaking."
+    },
+    {
+      "id": "400-art-sistine",
+      "category": "Art",
+      "difficulty": "Harder",
+      "question": "Who painted the ceiling of the Sistine Chapel?",
+      "options": [
+        "Michelangelo",
+        "Raphael",
+        "Leonardo da Vinci",
+        "Donatello"
+      ],
+      "answerIndex": 0,
+      "explanation": "Michelangelo painted the Sistine Chapel ceiling."
+    },
+    {
+      "id": "400-music-four-seasons",
+      "category": "Music",
+      "difficulty": "Harder",
+      "question": "The Four Seasons was composed by whom?",
+      "options": [
+        "Antonio Vivaldi",
+        "Johann Strauss",
+        "Franz Liszt",
+        "Gustav Mahler"
+      ],
+      "answerIndex": 0,
+      "explanation": "The Four Seasons is a set of violin concertos by Antonio Vivaldi."
+    },
+    {
+      "id": "400-language-esperanto",
+      "category": "Language",
+      "difficulty": "Harder",
+      "question": "Esperanto was created as what type of language?",
+      "options": [
+        "Constructed international language",
+        "Ancient Greek dialect",
+        "Secret military code",
+        "Regional Italian dialect"
+      ],
+      "answerIndex": 0,
+      "explanation": "Esperanto is a constructed international auxiliary language."
+    },
+    {
+      "id": "400-bible-revelation",
+      "category": "Bible",
+      "difficulty": "Harder",
+      "question": "The book of Revelation is traditionally associated with which author?",
+      "options": [
+        "John",
+        "Luke",
+        "Moses",
+        "Isaiah"
+      ],
+      "answerIndex": 0,
+      "explanation": "Revelation is traditionally associated with John."
+    }
+  ],
+  "500": [
+    {
+      "id": "500-space-ceres",
+      "category": "Space",
+      "difficulty": "Very Hard",
+      "question": "Ceres is located in which region of the solar system?",
+      "options": [
+        "Asteroid belt",
+        "Kuiper belt",
+        "Oort cloud",
+        "Saturn's rings"
+      ],
+      "answerIndex": 0,
+      "explanation": "Ceres is the largest object in the asteroid belt."
+    },
+    {
+      "id": "500-science-heisenberg",
+      "category": "Science",
+      "difficulty": "Very Hard",
+      "question": "The uncertainty principle is most closely associated with which physicist?",
+      "options": [
+        "Werner Heisenberg",
+        "Niels Bohr",
+        "Max Planck",
+        "Enrico Fermi"
+      ],
+      "answerIndex": 0,
+      "explanation": "The uncertainty principle is associated with Werner Heisenberg."
+    },
+    {
+      "id": "500-geography-urals",
+      "category": "Geography",
+      "difficulty": "Very Hard",
+      "question": "The Ural Mountains are commonly considered part of the boundary between which two continents?",
+      "options": [
+        "Europe and Asia",
+        "Asia and Africa",
+        "Europe and Africa",
+        "North and South America"
+      ],
+      "answerIndex": 0,
+      "explanation": "The Urals are often considered part of the boundary between Europe and Asia."
+    },
+    {
+      "id": "500-history-defenestration",
+      "category": "History",
+      "difficulty": "Very Hard",
+      "question": "The Defenestration of Prague helped trigger which conflict?",
+      "options": [
+        "Thirty Years' War",
+        "Crimean War",
+        "War of 1812",
+        "Spanish Civil War"
+      ],
+      "answerIndex": 0,
+      "explanation": "The 1618 Defenestration of Prague helped trigger the Thirty Years' War."
+    },
+    {
+      "id": "500-literature-mock-epic",
+      "category": "Literature",
+      "difficulty": "Very Hard",
+      "question": "The Rape of the Lock is a mock-epic poem by which writer?",
+      "options": [
+        "Alexander Pope",
+        "John Donne",
+        "Samuel Johnson",
+        "William Blake"
+      ],
+      "answerIndex": 0,
+      "explanation": "Alexander Pope wrote The Rape of the Lock."
+    },
+    {
+      "id": "500-sports-olympics",
+      "category": "Sports",
+      "difficulty": "Very Hard",
+      "question": "The first modern Olympic Games were held in which city?",
+      "options": [
+        "Athens",
+        "Paris",
+        "London",
+        "Rome"
+      ],
+      "answerIndex": 0,
+      "explanation": "The first modern Olympics were held in Athens in 1896."
+    },
+    {
+      "id": "500-art-baroque",
+      "category": "Art",
+      "difficulty": "Very Hard",
+      "question": "The artist Caravaggio is most closely associated with which art movement?",
+      "options": [
+        "Baroque",
+        "Impressionism",
+        "Cubism",
+        "Surrealism"
+      ],
+      "answerIndex": 0,
+      "explanation": "Caravaggio is strongly associated with Baroque art."
+    },
+    {
+      "id": "500-music-rite",
+      "category": "Music",
+      "difficulty": "Very Hard",
+      "question": "The Rite of Spring was composed by whom?",
+      "options": [
+        "Igor Stravinsky",
+        "Claude Debussy",
+        "Sergei Rachmaninoff",
+        "Giacomo Puccini"
+      ],
+      "answerIndex": 0,
+      "explanation": "Igor Stravinsky composed The Rite of Spring."
+    },
+    {
+      "id": "500-language-rosetta",
+      "category": "Language",
+      "difficulty": "Very Hard",
+      "question": "The Rosetta Stone helped scholars decipher which ancient writing system?",
+      "options": [
+        "Egyptian hieroglyphs",
+        "Cuneiform",
+        "Linear B",
+        "Runes"
+      ],
+      "answerIndex": 0,
+      "explanation": "The Rosetta Stone was key to deciphering Egyptian hieroglyphs."
+    },
+    {
+      "id": "500-bible-pentateuch",
+      "category": "Bible",
+      "difficulty": "Very Hard",
+      "question": "The Pentateuch traditionally refers to how many books?",
+      "options": [
+        "Five",
+        "Seven",
+        "Ten",
+        "Twelve"
+      ],
+      "answerIndex": 0,
+      "explanation": "The Pentateuch refers to the first five books of the Bible."
+    }
+  ]
+};
+
+for (const value of QUESTION_VALUES) {
+  QUESTION_BANK[value].push(...(EXTRA_QUESTION_BANK[value] || []));
+}
+
+const EXTRA_FINAL_BANK = [
+  {
+    "id": "final-space-lightyear",
+    "category": "Space",
+    "question": "A light-year measures which of these?",
+    "options": [
+      "Distance",
+      "Time",
+      "Mass",
+      "Temperature"
+    ],
+    "answerIndex": 0,
+    "explanation": "A light-year is a unit of distance."
+  },
+  {
+    "id": "final-science-dna",
+    "category": "Science",
+    "question": "DNA stands for which phrase?",
+    "options": [
+      "Deoxyribonucleic acid",
+      "Dynamic nitrogen atom",
+      "Double neutral acid",
+      "Digital nucleic array"
+    ],
+    "answerIndex": 0,
+    "explanation": "DNA stands for deoxyribonucleic acid."
+  },
+  {
+    "id": "final-history-louisiana",
+    "category": "U.S. History",
+    "question": "The Louisiana Purchase was made during which U.S. president's administration?",
+    "options": [
+      "Thomas Jefferson",
+      "John Adams",
+      "Andrew Jackson",
+      "James Monroe"
+    ],
+    "answerIndex": 0,
+    "explanation": "The Louisiana Purchase occurred under Thomas Jefferson."
+  },
+  {
+    "id": "final-geography-caspian",
+    "category": "Geography",
+    "question": "The Caspian Sea is often described as the world's largest what?",
+    "options": [
+      "Inland body of water",
+      "Ocean gulf",
+      "Freshwater lake",
+      "Coral reef"
+    ],
+    "answerIndex": 0,
+    "explanation": "The Caspian Sea is the world's largest inland body of water."
+  },
+  {
+    "id": "final-literature-melville",
+    "category": "Literature",
+    "question": "Who wrote Moby-Dick?",
+    "options": [
+      "Herman Melville",
+      "Nathaniel Hawthorne",
+      "Walt Whitman",
+      "Edgar Allan Poe"
+    ],
+    "answerIndex": 0,
+    "explanation": "Herman Melville wrote Moby-Dick."
+  },
+  {
+    "id": "final-sports-marathon",
+    "category": "Sports",
+    "question": "A standard marathon is approximately how many miles?",
+    "options": [
+      "26.2",
+      "13.1",
+      "20.0",
+      "30.0"
+    ],
+    "answerIndex": 0,
+    "explanation": "A marathon is approximately 26.2 miles."
+  },
+  {
+    "id": "final-art-mona",
+    "category": "Art",
+    "question": "The Mona Lisa is housed in which museum?",
+    "options": [
+      "The Louvre",
+      "The Prado",
+      "The Uffizi",
+      "The Met"
+    ],
+    "answerIndex": 0,
+    "explanation": "The Mona Lisa is housed in the Louvre."
+  },
+  {
+    "id": "final-music-hallelujah",
+    "category": "Music",
+    "question": "The Hallelujah Chorus is from which oratorio?",
+    "options": [
+      "Messiah",
+      "The Creation",
+      "Elijah",
+      "St. Matthew Passion"
+    ],
+    "answerIndex": 0,
+    "explanation": "The Hallelujah Chorus is from Handel's Messiah."
+  },
+  {
+    "id": "final-bible-proverbs",
+    "category": "Bible",
+    "question": "The book of Proverbs is traditionally associated with which king?",
+    "options": [
+      "Solomon",
+      "Saul",
+      "Herod",
+      "Ahab"
+    ],
+    "answerIndex": 0,
+    "explanation": "Proverbs is traditionally associated with Solomon."
+  },
+  {
+    "id": "final-tech-url",
+    "category": "Technology",
+    "question": "In web addresses, what does URL stand for?",
+    "options": [
+      "Uniform Resource Locator",
+      "Universal Router Link",
+      "User Request Line",
+      "Unified Runtime Label"
+    ],
+    "answerIndex": 0,
+    "explanation": "URL stands for Uniform Resource Locator."
+  }
+];
+FINAL_BANK.push(...EXTRA_FINAL_BANK);
 
 const app = document.getElementById("app");
 const toast = document.getElementById("toast");
@@ -248,20 +1101,152 @@ function hashString(str) {
   return Math.abs(hash);
 }
 
-function pickDailyQuestion(value, dateKey, usedCategories) {
+function usedQuestionIdsBefore(dateKey) {
+  const used = new Set();
+
+  for (const [pastDateKey, byPlayer] of Object.entries(state.results || {})) {
+    // Do not count today's questions as used, otherwise Ian and Shannon could get different boards on the same day.
+    if (pastDateKey >= dateKey) continue;
+
+    for (const result of Object.values(byPlayer || {})) {
+      for (const answer of result.answers || []) {
+        if (answer.questionId) used.add(answer.questionId);
+      }
+
+      if (result.final?.questionId) used.add(result.final.questionId);
+    }
+  }
+
+  return used;
+}
+
+function dateSerial(dateKey) {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  const current = Date.UTC(year, month - 1, day);
+  const base = Date.UTC(2026, 0, 1);
+  return Math.max(0, Math.floor((current - base) / 86400000));
+}
+
+function shuffledOptionSet(correct, wrongs, seed) {
+  const items = [correct, ...wrongs].map(value => String(value));
+  const options = [...items].sort((a, b) => hashString(`${seed}-${a}`) - hashString(`${seed}-${b}`));
+  return { options, answerIndex: options.indexOf(String(correct)) };
+}
+
+function generatedFallbackQuestion(value, dateKey) {
+  const n = dateSerial(dateKey) + value;
+  let category = "Daily Puzzle";
+  let difficulty = "Easy";
+  let question = "";
+  let correct = 0;
+  let wrongs = [];
+
+  if (value === 100) {
+    category = "Quick Math";
+    difficulty = "Easy";
+    const a = 8 + (n % 17);
+    const b = 6 + ((n * 3) % 15);
+    correct = a + b;
+    wrongs = [correct + 1, correct - 2, correct + 4];
+    question = `What is ${a} + ${b}?`;
+  } else if (value === 200) {
+    category = "Number Sense";
+    difficulty = "Medium";
+    const a = 4 + (n % 9);
+    const b = 5 + ((n * 5) % 8);
+    correct = a * b;
+    wrongs = [correct + a, correct - b, correct + 10];
+    question = `What is ${a} × ${b}?`;
+  } else if (value === 300) {
+    category = "Squares";
+    difficulty = "Hard";
+    const a = 8 + (n % 18);
+    correct = a * a;
+    wrongs = [(a + 1) * (a + 1), (a - 1) * (a - 1), correct + a];
+    question = `What is ${a} squared?`;
+  } else if (value === 400) {
+    category = "Patterns";
+    difficulty = "Harder";
+    const start = 3 + (n % 11);
+    const step = 4 + ((n * 7) % 9);
+    correct = start + step * 4;
+    wrongs = [correct + step, correct - step, correct + 2];
+    question = `What comes next in this pattern: ${start}, ${start + step}, ${start + step * 2}, ${start + step * 3}, ?`;
+  } else {
+    category = "Mental Math";
+    difficulty = "Very Hard";
+    const a = 11 + (n % 13);
+    const b = 6 + ((n * 5) % 9);
+    const c = 9 + ((n * 7) % 19);
+    correct = a * b + c;
+    wrongs = [a * b - c, correct + b, correct - a];
+    question = `What is (${a} × ${b}) + ${c}?`;
+  }
+
+  const { options, answerIndex } = shuffledOptionSet(correct, wrongs, `${dateKey}-${value}-fallback`);
+  return {
+    id: `${value}-fallback-${dateKey}`,
+    category,
+    difficulty,
+    question,
+    options,
+    answerIndex,
+    explanation: `The correct answer is ${correct}.`,
+    generated: true,
+    value,
+  };
+}
+
+function generatedFallbackFinal(dateKey) {
+  const n = dateSerial(dateKey) + 900;
+  const a = 7 + (n % 12);
+  const b = 5 + ((n * 3) % 10);
+  const c = 3 + ((n * 5) % 7);
+  const d = 8 + ((n * 11) % 20);
+  const correct = (a + b) * c - d;
+  const wrongs = [correct + c, correct - b, correct + d];
+  const { options, answerIndex } = shuffledOptionSet(correct, wrongs, `${dateKey}-final-fallback`);
+
+  return {
+    id: `final-fallback-${dateKey}`,
+    category: "Final Puzzle",
+    question: `What is (${a} + ${b}) × ${c} - ${d}?`,
+    options,
+    answerIndex,
+    explanation: `First add ${a} + ${b}, then multiply by ${c}, then subtract ${d}. The answer is ${correct}.`,
+    generated: true,
+  };
+}
+
+function pickDailyQuestion(value, dateKey, usedCategories, usedQuestionIds, selectedQuestionIds) {
   const bank = QUESTION_BANK[value] || [];
   const shuffled = [...bank].sort((a, b) => hashString(`${dateKey}-${value}-${a.id}`) - hashString(`${dateKey}-${value}-${b.id}`));
-  const selected = shuffled.find(q => !usedCategories.has(q.category)) || shuffled[0];
+  const unused = shuffled.filter(q => !usedQuestionIds.has(q.id) && !selectedQuestionIds.has(q.id));
+
+  const selected =
+    unused.find(q => !usedCategories.has(q.category)) ||
+    unused[0] ||
+    generatedFallbackQuestion(value, dateKey);
+
   usedCategories.add(selected.category);
+  selectedQuestionIds.add(selected.id);
   return { ...selected, value };
+}
+
+function pickDailyFinal(dateKey, usedQuestionIds) {
+  const shuffled = [...FINAL_BANK].sort((a, b) => hashString(`${dateKey}-final-${a.id}`) - hashString(`${dateKey}-final-${b.id}`));
+  return shuffled.find(q => !usedQuestionIds.has(q.id)) || generatedFallbackFinal(dateKey);
 }
 
 function dailySet(dateKey = todayKey()) {
   const usedCategories = new Set();
+  const usedQuestionIds = usedQuestionIdsBefore(dateKey);
+  const selectedQuestionIds = new Set();
+
   return {
     dateKey,
-    questions: QUESTION_VALUES.map(value => pickDailyQuestion(value, dateKey, usedCategories)),
-    final: FINAL_BANK[hashString(`${dateKey}-final-ladder-v7`) % FINAL_BANK.length],
+    questions: QUESTION_VALUES.map(value => pickDailyQuestion(value, dateKey, usedCategories, usedQuestionIds, selectedQuestionIds)),
+    final: pickDailyFinal(dateKey, usedQuestionIds),
   };
 }
 

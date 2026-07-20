@@ -97,3 +97,12 @@ The included Row Level Security policies are simple prototype policies for a two
 - Fixed `supabase-config.js` so Supabase is turned on.
 - Uses the configured Supabase URL and publishable key.
 - Keeps the locked daily results setup with no Reset Today / Clear All Scores buttons.
+
+
+## New in v11 — No-Repeat Daily Questions
+
+- Daily questions now skip question IDs that were already used on previous saved days.
+- Ian and Shannon still get the same board on the same day.
+- Added extra trivia questions to the built-in bank.
+- Added a fallback daily puzzle generator so the app can continue creating new questions even after the built-in trivia bank is exhausted.
+- No new Supabase table is required for this version.
